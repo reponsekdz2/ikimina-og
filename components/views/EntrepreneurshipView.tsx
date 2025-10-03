@@ -1,7 +1,8 @@
 import React from 'react';
-import type { User, Course } from '../../types';
-import { MOCK_COURSES } from '../../constants';
+import type { User, Course, IncubationProgram } from '../../types';
+import { MOCK_COURSES, MOCK_PROGRAMS } from '../../constants';
 import Widget from '../shared/Widget';
+import { useTranslations } from '../../hooks';
 
 interface CourseCardProps {
     course: Course;
@@ -28,16 +29,30 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     );
 }
 
+const ProgramCard: React.FC<{program: IncubationProgram}> = ({ program }) => (
+    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-gray-100 dark:border-slate-700">
+        <h4 className="font-bold text-slate-800 dark:text-white">{program.title}</h4>
+        <p className="text-sm font-semibold text-rwanda-blue">{program.provider}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{program.description}</p>
+        <div className="mt-4 flex items-center justify-between">
+            <span className="text-sm text-gray-500 dark:text-gray-400">{program.duration}</span>
+            <button className="px-5 py-2 bg-rwanda-green text-white font-semibold rounded-full hover:bg-opacity-90 transition text-sm">Apply</button>
+        </div>
+    </div>
+);
+
+
 interface EntrepreneurshipViewProps {
     user: User;
 }
 
 const EntrepreneurshipView: React.FC<EntrepreneurshipViewProps> = ({ user }) => {
+    const { t } = useTranslations();
     return (
         <div className="space-y-8">
-            <h2 className="text-3xl font-bold font-display text-slate-800 dark:text-white">Entrepreneurship Hub</h2>
+            <h2 className="text-3xl font-bold font-display text-slate-800 dark:text-white">{t('entrepreneurship.title')}</h2>
             
-            <Widget title="Available Courses">
+            <Widget title={t('entrepreneurship.courses')}>
                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {MOCK_COURSES.map(course => (
                         <CourseCard key={course.id} course={course} />
@@ -45,15 +60,28 @@ const EntrepreneurshipView: React.FC<EntrepreneurshipViewProps> = ({ user }) => 
                  </div>
             </Widget>
 
-            {user.role === 'seeker' && (
-                <Widget title="Pitch Your Idea">
-                    <div className="text-center p-8">
-                        <h4 className="text-xl font-bold">Have a business idea?</h4>
-                        <p className="text-gray-500 dark:text-gray-400 mt-2 mb-4">Share it with the community and get feedback or find partners.</p>
-                        <button className="px-6 py-2 bg-rwanda-green text-white font-semibold rounded-full hover:bg-opacity-90 transition">Submit Your Pitch</button>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                    <Widget title={t('entrepreneurship.incubation')}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {MOCK_PROGRAMS.map(program => (
+                                <ProgramCard key={program.id} program={program} />
+                            ))}
+                        </div>
+                    </Widget>
+                </div>
+                {user.role === 'seeker' && (
+                    <div className="lg:col-span-1">
+                        <Widget title={t('entrepreneurship.pitch')}>
+                            <div className="text-center p-8 flex flex-col justify-center items-center h-full">
+                                <h4 className="text-xl font-bold">{t('entrepreneurship.pitchTitle')}</h4>
+                                <p className="text-gray-500 dark:text-gray-400 mt-2 mb-4">{t('entrepreneurship.pitchDesc')}</p>
+                                <button className="px-6 py-2 bg-rwanda-green text-white font-semibold rounded-full hover:bg-opacity-90 transition">{t('entrepreneurship.pitchButton')}</button>
+                            </div>
+                        </Widget>
                     </div>
-                </Widget>
-            )}
+                )}
+            </div>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { DashboardView, User } from '../types';
-import { DashboardIcon, IkiminaIcon, WalletIcon, EntrepreneurshipIcon, UserIcon as ProfileIcon, LogoutIcon } from '../constants';
+import { DashboardIcon, IkiminaIcon, WalletIcon, EntrepreneurshipIcon, UserIcon as ProfileIcon, LogoutIcon, ForumIcon } from '../constants';
 import { useTranslations } from '../hooks';
 
 interface SidebarProps {
@@ -39,6 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, onLogout, 
         { id: 'ikimina', label: t('sidebar.nav.ikimina'), icon: <IkiminaIcon className="h-6 w-6" /> },
         { id: 'wallet', label: t('sidebar.nav.wallet'), icon: <WalletIcon className="h-6 w-6" /> },
         { id: 'entrepreneurship', label: t('sidebar.nav.learn'), icon: <EntrepreneurshipIcon className="h-6 w-6" /> },
+        { id: 'forum', label: t('sidebar.nav.forum'), icon: <ForumIcon className="h-6 w-6" /> },
         { id: 'profile', label: t('sidebar.nav.profile'), icon: <ProfileIcon className="h-6 w-6" /> },
     ];
 

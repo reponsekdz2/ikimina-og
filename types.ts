@@ -1,6 +1,6 @@
 export type Role = 'seeker' | 'employer';
 export type AuthScreen = 'login' | 'register';
-export type DashboardView = 'dashboard' | 'ikimina' | 'wallet' | 'entrepreneurship' | 'profile';
+export type DashboardView = 'dashboard' | 'ikimina' | 'wallet' | 'entrepreneurship' | 'profile' | 'forum';
 
 export interface Job {
   id: number;
@@ -8,6 +8,7 @@ export interface Job {
   employer: string;
   salary: string;
   type: 'Full-time' | 'Part-time' | 'Contract';
+  isFeatured?: boolean;
 }
 
 export interface IkiminaMember {
@@ -36,6 +37,7 @@ export interface User {
   bio?: string;
   documents?: { name: string; type: 'CV' | 'Diploma' | 'Certificate' }[];
   badges?: string[];
+  creditScore?: number;
 }
 
 export interface FileWithPreview extends File {
@@ -56,4 +58,45 @@ export interface Course {
     description: string;
     duration: string;
     category: 'Business' | 'Finance' | 'Skills';
+}
+
+export interface ForumPost {
+    id: number;
+    author: string;
+    avatarUrl: string;
+    content: string;
+    timestamp: string;
+}
+
+export interface ForumTopic {
+    id: number;
+    title: string;
+    description: string;
+    posts: ForumPost[];
+    author: string;
+    timestamp: string;
+}
+
+export interface Webinar {
+    id: number;
+    title: string;
+    host: string;
+    date: string;
+    time: string;
+}
+
+export interface IncubationProgram {
+    id: number;
+    title: string;
+    provider: string;
+    duration: string;
+    description: string;
+}
+
+export interface FreelanceGig {
+    id: number;
+    title: string;
+    client: string;
+    budget: string;
+    skills: string[];
 }

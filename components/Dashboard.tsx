@@ -6,6 +6,7 @@ import IkiminaView from './views/IkiminaView';
 import WalletView from './views/WalletView';
 import EntrepreneurshipView from './views/EntrepreneurshipView';
 import ProfileView from './views/ProfileView';
+import ForumView from './views/ForumView';
 import IkiminaManagementModal from './IkiminaManagementModal';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useTranslations } from '../hooks';
@@ -49,6 +50,8 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onApplyClick, isDarkMode, t
                 return <EntrepreneurshipView user={user} />;
             case 'profile':
                 return <ProfileView user={user} />;
+            case 'forum':
+                return <ForumView user={user} />;
             default:
                 return <DashboardHome user={user} onApplyClick={onApplyClick} onManageIkimina={setManagingIkimina}/>;
         }
