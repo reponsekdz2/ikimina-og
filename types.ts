@@ -1,60 +1,32 @@
 export type Role = 'seeker' | 'employer';
-
 export type AuthScreen = 'login' | 'register';
 
-export type DashboardView = 'dashboard' | 'ikimina' | 'wallet' | 'entrepreneurship' | 'profile' | 'forum' | 'achievements' | 'stories' | 'coach';
-
-export interface Job {
+export interface CVExperience {
   id: number;
   title: string;
-  employer: string;
-  salary: string;
-  type: string;
-  isFeatured: boolean;
-}
-
-export interface IkiminaMember {
-  id: number;
-  name: string;
-  avatarUrl: string;
-  contributionStatus: 'Paid' | 'Pending';
-}
-
-export interface Ikimina {
-  id: number;
-  name: string;
-  creator: string;
-  category: 'Business' | 'Youth' | 'Personal' | 'Agriculture';
-  progress: number;
-  target: number;
-  members: IkiminaMember[];
-}
-
-export interface CVExperience {
-    id: number;
-    title: string;
-    company: string;
-    duration: string;
-    description: string;
+  company: string;
+  duration: string;
+  description: string;
 }
 
 export interface CVEducation {
-    id: number;
-    school: string;
-    degree: string;
-    duration: string;
+  id: number;
+  school: string;
+  degree: string;
+  duration: string;
 }
 
 export interface CVData {
-    photoUrl: string;
-    fullName: string;
-    email: string;
-    phoneNumber: string;
-    address: string;
-    summary: string;
-    experience: CVExperience[];
-    education: CVEducation[];
-    skills: string[];
+  photoUrl: string;
+  portfolioVideoUrl?: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  summary: string;
+  experience: CVExperience[];
+  education: CVEducation[];
+  skills: string[];
 }
 
 export interface User {
@@ -62,9 +34,35 @@ export interface User {
   name: string;
   email: string;
   role: Role;
-  verificationStatus: 'Verified' | 'Unverified' | 'Pending';
-  achievements: number[];
+  verificationStatus: 'Verified' | 'Unverified';
+  achievements: string[]; // array of achievement IDs
   cvData: CVData;
+}
+
+export interface Job {
+    id: number;
+    title: string;
+    employer: string;
+    salary: string;
+    type: string;
+    isFeatured: boolean;
+}
+
+export interface IkiminaMember {
+    id: number;
+    name: string;
+    avatarUrl: string;
+    contributionStatus: 'Paid' | 'Pending';
+}
+
+export interface Ikimina {
+    id: number;
+    name: string;
+    creator: string;
+    category: 'Business' | 'Youth' | 'Personal' | 'Agriculture';
+    progress: number;
+    target: number;
+    members: IkiminaMember[];
 }
 
 export interface FreelanceGig {
@@ -75,35 +73,10 @@ export interface FreelanceGig {
     budget: string;
 }
 
-export interface Course {
-    id: number;
-    title: string;
-    description: string;
-    duration: string;
-    category: 'Business' | 'Finance' | 'Skills';
-}
-
-export interface IncubationProgram {
-    id: number;
-    title: string;
-    provider: string;
-    description: string;
-    duration: string;
-}
-
-export interface Mentor {
-    id: number;
-    name: string;
-    avatarUrl: string;
-    title: string;
-    company: string;
-    expertise: string[];
-}
-
 export interface ForumPost {
     id: number;
     author: string;
-    content: string;
+    text: string;
 }
 
 export interface ForumTopic {
@@ -124,7 +97,7 @@ export interface Webinar {
 }
 
 export interface Achievement {
-    id: number;
+    id: string;
     name: string;
     description: string;
     icon: string;
@@ -139,9 +112,9 @@ export interface LeaderboardUser {
 
 export interface SuccessStory {
     id: number;
-    name: string;
-    title: string;
-    category: 'Job Seeker' | 'Entrepreneur' | 'Saver';
+    author: string;
+    role: Role;
     imageUrl: string;
     story: string;
+    title: string;
 }
