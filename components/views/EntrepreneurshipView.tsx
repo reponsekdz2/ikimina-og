@@ -1,6 +1,6 @@
 import React from 'react';
-import type { User, Course, IncubationProgram } from '../../types';
-import { MOCK_COURSES, MOCK_PROGRAMS } from '../../constants';
+import type { User, Course, IncubationProgram, Mentor } from '../../types';
+import { MOCK_COURSES, MOCK_PROGRAMS, MOCK_MENTORS } from '../../constants';
 import Widget from '../shared/Widget';
 import { useTranslations } from '../../hooks';
 
@@ -41,6 +41,23 @@ const ProgramCard: React.FC<{program: IncubationProgram}> = ({ program }) => (
     </div>
 );
 
+const MentorCard: React.FC<{ mentor: Mentor }> = ({ mentor }) => {
+    const { t } = useTranslations();
+    return (
+        <div className="bg-white dark:bg-slate-800 p-4 rounded-xl text-center shadow-md border border-gray-100 dark:border-slate-700">
+            <img src={mentor.avatarUrl} alt={mentor.name} className="w-20 h-20 rounded-full mx-auto border-2 border-rwanda-blue" />
+            <h4 className="font-bold text-slate-800 dark:text-white mt-3">{mentor.name}</h4>
+            <p className="text-sm text-rwanda-blue">{mentor.title}, {mentor.company}</p>
+            <div className="flex flex-wrap gap-1 mt-2 justify-center">
+                {mentor.expertise.map(skill => (
+                    <span key={skill} className="px-2 py-0.5 text-xs bg-gray-200 dark:bg-slate-700 rounded-full">{skill}</span>
+                ))}
+            </div>
+            <button className="w-full mt-4 py-2 px-4 bg-rwanda-blue text-white font-semibold rounded-full hover:bg-opacity-90 transition text-sm">{t('entrepreneurship.connect')}</button>
+        </div>
+    );
+};
+
 
 interface EntrepreneurshipViewProps {
     user: User;
@@ -59,6 +76,13 @@ const EntrepreneurshipView: React.FC<EntrepreneurshipViewProps> = ({ user }) => 
                     ))}
                  </div>
             </Widget>
+
+            <Widget title={t('entrepreneurship.mentors')}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {MOCK_MENTORS.map(mentor => <MentorCard key={mentor.id} mentor={mentor}/>)}
+                </div>
+            </Widget>
+
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">

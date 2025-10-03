@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Role, User } from '../../types';
-import { MailIcon, LockIcon } from '../../constants';
+import { MailIcon, LockIcon, MOCK_USER } from '../../constants';
 import { useTranslations } from '../../hooks';
 
 interface LoginProps {
@@ -14,12 +14,11 @@ const Login: React.FC<LoginProps> = ({ role, onAuthSuccess, switchToRegister }) 
     
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Simulate login
+        // Use the detailed mock user for demonstration
         const mockUser: User = {
-            id: 1,
-            name: role === 'seeker' ? 'Jane Doe' : 'Kigali Tech',
-            email: 'test@example.com',
-            role: role
+            ...MOCK_USER,
+            role: role,
+            name: role === 'seeker' ? MOCK_USER.name : 'Kigali Tech',
         };
         onAuthSuccess(mockUser);
     };

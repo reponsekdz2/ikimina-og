@@ -3,7 +3,7 @@ import type { User, Job, Ikimina, FreelanceGig } from '../../types';
 import JobCard from '../JobCard';
 import IkiminaCard from '../IkiminaCard';
 import Widget from '../shared/Widget';
-import { JOBS_DATA, IKIMINA_DATA, MOCK_GIGS, RwandaIllustration } from '../../constants';
+import { JOBS_DATA, IKIMINA_DATA, MOCK_GIGS } from '../../constants';
 import { useTranslations } from '../../hooks';
 
 interface DashboardHomeProps {
@@ -11,6 +11,17 @@ interface DashboardHomeProps {
     onApplyClick: (job: Job) => void;
     onManageIkimina: (ikimina: Ikimina) => void;
 }
+
+const SummaryCard = ({ title, value, icon }: { title: string, value: string, icon: string }) => (
+    <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg flex items-center gap-4">
+        <div className="text-3xl bg-gray-100 dark:bg-slate-700 p-3 rounded-full">{icon}</div>
+        <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+            <p className="text-2xl font-bold font-display text-slate-800 dark:text-white">{value}</p>
+        </div>
+    </div>
+);
+
 
 const GigCard: React.FC<{ gig: FreelanceGig }> = ({ gig }) => (
     <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
@@ -32,7 +43,17 @@ const SeekerHome: React.FC<Pick<DashboardHomeProps, 'onApplyClick' | 'user'>> = 
     const { t } = useTranslations();
     return (
     <>
-        <RwandaIllustration />
+        <div className="mb-8">
+            <h2 className="text-3xl font-bold font-display text-slate-800 dark:text-white">{t('dashboard.seeker.welcome', { name: user.name.split(' ')[0] })}</h2>
+            <p className="text-slate-600 dark:text-slate-400">{t('dashboard.seeker.subtitle')}</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <SummaryCard title={t('dashboard.seeker.summary.matches')} value="4" icon="🎯" />
+            <SummaryCard title={t('dashboard.seeker.summary.savings')} value="75%" icon="💰" />
+            <SummaryCard title={t('dashboard.seeker.summary.course')} value="In Progress" icon="🎓" />
+        </div>
+        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
                 <Widget title={t('dashboard.seeker.aiJobs')}>
@@ -56,16 +77,11 @@ const SeekerHome: React.FC<Pick<DashboardHomeProps, 'onApplyClick' | 'user'>> = 
                         {MOCK_GIGS.map(gig => <GigCard key={gig.id} gig={gig} />)}
                     </div>
                 </Widget>
+                 <Widget title={t('dashboard.seeker.joinIkimina')}>
+                    <IkiminaCard group={IKIMINA_DATA[0]} role="seeker" />
+                </Widget>
             </div>
         </div>
-
-        <Widget title={t('dashboard.seeker.joinIkimina')}>
-             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {IKIMINA_DATA.map(group => (
-                    <IkiminaCard key={group.id} group={group} role="seeker" />
-                ))}
-            </div>
-        </Widget>
     </>
     );
 };

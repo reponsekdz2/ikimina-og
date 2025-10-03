@@ -15,11 +15,24 @@ const Register: React.FC<RegisterProps> = ({ role, onAuthSuccess, switchToLogin 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Simulate registration
-         const mockUser: User = {
+        const mockUser: User = {
             id: Date.now(),
             name: 'New User',
             email: 'new@example.com',
-            role: role
+            role: role,
+            verificationStatus: 'Unverified',
+            achievements: [],
+            cvData: {
+                photoUrl: `https://i.pravatar.cc/150?u=${Date.now()}`,
+                fullName: 'New User',
+                email: 'new@example.com',
+                phoneNumber: '',
+                address: '',
+                summary: 'Newly registered user. Ready to build my profile!',
+                experience: [],
+                education: [],
+                skills: [],
+            },
         };
         onAuthSuccess(mockUser);
     };

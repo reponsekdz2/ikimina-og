@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { LanguageContext, LanguageContextType } from './LanguageContext';
 import { translations } from './translations';
 
@@ -7,37 +7,65 @@ export const useTranslations = () => {
     if (!context) {
         throw new Error('useTranslations must be used within a LanguageProvider');
     }
-    const { language, setLanguage } = context;
 
-    const t = (key: string, replacements?: { [key: string]: string | number }) => {
-        let translation = translations[language]?.[key] || translations['en'][key] || key;
+    const t = (key: string, options?: { [key: string]: string | number }) => {
+        const lang = context.language;
+        // Attempt to get the translation from the current language
+        let text = key.split('.').reduce((obj: any, k: string) => obj && obj[k], translations[lang]);
+
+        // Fallback to English if the key is not found in the current language
+        if (!text) {
+            text = key.split('.').reduce((obj: any, k: string) => obj && obj[k], translations['en']);
+        }
+
+        // If still not found, return the key itself
+        if (!text) {
+            return key;
+        }
         
-        if (replacements && typeof translation === 'string') {
-            Object.keys(replacements).forEach(placeholder => {
-                const regex = new RegExp(`{${placeholder}}`, 'g');
-                translation = translation.replace(regex, String(replacements[placeholder]));
+        if (options) {
+            Object.keys(options).forEach(k => {
+                const regex = new RegExp(`{${k}}`, 'g');
+                text = text.replace(regex, String(options[k]));
             });
         }
-        return translation;
+
+        return text;
     };
-    
-    const tc = (key: string, replacements: { [key: string]: React.ReactNode }): (string | React.ReactNode)[] => {
-        const translationTemplate = translations[language]?.[key] || translations['en'][key] || key;
-        if (typeof translationTemplate !== 'string') return [translationTemplate];
 
-        const regex = new RegExp(`({${Object.keys(replacements).join('|')}})`, 'g');
-        const parts = translationTemplate.split(regex).filter(part => part);
+    return { ...context, t };
+};
 
-        return parts.map((part, index) => {
-            if (part.startsWith('{') && part.endsWith('}')) {
-                const placeholder = part.slice(1, -1);
-                return React.isValidElement(replacements[placeholder]) 
-                    ? React.cloneElement(replacements[placeholder] as React.ReactElement, { key: index }) 
-                    : part;
+export const useAnimatedCounter = (endValue: number, duration: number = 2000) => {
+    const [count, setCount] = useState(0);
+    const startValue = 0;
+    const startTimeRef = useRef<number | null>(null);
+    const frameRef = useRef<number | null>(null);
+
+    const animate = (timestamp: number) => {
+        if (!startTimeRef.current) {
+            startTimeRef.current = timestamp;
+        }
+
+        const progress = timestamp - startTimeRef.current;
+        const percentage = Math.min(progress / duration, 1);
+        
+        const currentCount = startValue + (endValue - startValue) * percentage;
+        setCount(currentCount);
+
+        if (progress < duration) {
+            frameRef.current = requestAnimationFrame(animate);
+        }
+    };
+
+    useEffect(() => {
+        frameRef.current = requestAnimationFrame(animate);
+        return () => {
+            if (frameRef.current) {
+                cancelAnimationFrame(frameRef.current);
             }
-            return part;
-        });
-    };
+        };
+    }, [endValue, duration]);
 
-    return { t, tc, language, setLanguage };
+    return count;
 };

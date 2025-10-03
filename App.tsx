@@ -1,92 +1,95 @@
-import React, { useState, useEffect } from 'react';
-import type { Role, User, Job } from './types';
-import { MOCK_USER_SEEKER, MOCK_USER_EMPLOYER } from './constants';
+import React, { useState, useEffect, useCallback } from 'react';
 import LandingPage from './components/LandingPage';
+import AuthPage from './components/auth/AuthPage';
 import Dashboard from './components/Dashboard';
 import JobApplicationModal from './components/JobApplicationModal';
-import AuthPage from './components/auth/AuthPage';
+// FIX: Using `import type` as these are only used as types.
+import type { User, Role, Job } from './types';
 
-export default function App() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [authFlow, setAuthFlow] = useState<{ active: boolean; role: Role | null }>({ active: false, role: null });
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+const App: React.FC = () => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') === 'dark' || 
-             (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const savedMode = localStorage.getItem('darkMode');
+      return savedMode === 'true' || window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
   });
 
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [applyingForJob, setApplyingForJob] = useState<Job | null>(null);
+
   useEffect(() => {
-    const root = window.document.documentElement;
     if (isDarkMode) {
-      root.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('darkMode', 'true');
     } else {
-      root.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('darkMode', 'false');
     }
   }, [isDarkMode]);
 
-  const handleRoleSelect = (selectedRole: Role) => {
-    setAuthFlow({ active: true, role: selectedRole });
+  const toggleDarkMode = () => {
+    setIsDarkMode(prev => !prev);
+  };
+
+  const handleRoleSelect = (role: Role) => {
+    setSelectedRole(role);
   };
   
+  const handleCancelAuth = () => {
+      setSelectedRole(null);
+  }
+
   const handleAuthSuccess = (user: User) => {
-      const fullUser = user.role === 'seeker' ? MOCK_USER_SEEKER : MOCK_USER_EMPLOYER;
-      setCurrentUser({ ...fullUser, name: user.name, email: user.email });
-      setAuthFlow({ active: false, role: null });
+    setCurrentUser(user);
   };
 
-  const handleAuthCancel = () => {
-      setAuthFlow({ active: false, role: null });
-  };
-
-  const handleApplyClick = (job: Job) => {
-    setSelectedJob(job);
-    setIsModalOpen(true);
-  };
-  
   const handleLogout = () => {
     setCurrentUser(null);
-  }
+    setSelectedRole(null);
+  };
+  
+  const handleApplyClick = useCallback((job: Job) => {
+    setApplyingForJob(job);
+  }, []);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  }
+  const handleCloseModal = useCallback(() => {
+    setApplyingForJob(null);
+  }, []);
 
   const renderContent = () => {
     if (currentUser) {
       return (
-        <Dashboard 
-          user={currentUser} 
-          onApplyClick={handleApplyClick} 
+        <Dashboard
+          user={currentUser}
+          onApplyClick={handleApplyClick}
           isDarkMode={isDarkMode}
           toggleDarkMode={toggleDarkMode}
           onLogout={handleLogout}
         />
       );
     }
-    if (authFlow.active && authFlow.role) {
+    if (selectedRole) {
       return (
-        <AuthPage 
-          role={authFlow.role} 
-          onAuthSuccess={handleAuthSuccess} 
-          onCancel={handleAuthCancel}
+        <AuthPage
+          role={selectedRole}
+          onAuthSuccess={handleAuthSuccess}
+          onCancel={handleCancelAuth}
         />
       );
     }
-    return <LandingPage onRoleSelect={handleRoleSelect} />;
-  }
+    return <LandingPage onRoleSelect={handleRoleSelect} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />;
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-slate-900 font-sans text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <>
       {renderContent()}
-      {isModalOpen && selectedJob && (
-        <JobApplicationModal job={selectedJob} onClose={() => setIsModalOpen(false)} />
+      {applyingForJob && (
+        <JobApplicationModal job={applyingForJob} onClose={handleCloseModal} />
       )}
-    </div>
+    </>
   );
-}
+};
+
+export default App;

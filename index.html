@@ -2,64 +2,46 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KaziConnect Rwanda</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         darkMode: 'class',
         theme: {
           extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              display: ['Poppins', 'sans-serif'],
-            },
             colors: {
               'rwanda-blue': '#1E90FF',
               'rwanda-green': '#32CD32',
               'rwanda-yellow': '#FFD700',
             },
-            keyframes: {
-              glow: {
-                '0%, 100%': { boxShadow: '0 0 5px #32CD32, 0 0 10px #32CD32, 0 0 15px #32CD32' },
-                '50%': { boxShadow: '0 0 20px #32CD32, 0 0 30px #32CD32, 0 0 40px #32CD32' },
-              },
-              float: {
-                '0%, 100%': { transform: 'translateY(0px)' },
-                '50%': { transform: 'translateY(-10px)' },
-              },
-              blob: {
-                '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                '100%': { transform: 'translate(0px, 0px) scale(1)' },
-              },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Poppins', 'sans-serif'],
             },
-            animation: {
-              glow: 'glow 2s ease-in-out infinite',
-              float: 'float 3s ease-in-out infinite',
-              blob: 'blob 7s infinite ease-in-out',
-            }
-          }
-        }
+          },
+        },
       }
     </script>
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react-icons/": "https://aistudiocdn.com/react-icons@^5.5.0/"
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "types": "https://aistudiocdn.com/types@^0.1.1",
+    "hooks": "https://aistudiocdn.com/hooks@^0.3.2",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.22.0"
   }
 }
 </script>
 </head>
-  <body class="bg-gray-100 dark:bg-gray-900">
+  <body class="bg-gray-50 dark:bg-slate-900 transition-colors duration-500">
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
