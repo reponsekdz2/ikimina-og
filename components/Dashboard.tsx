@@ -7,6 +7,8 @@ import WalletView from './views/WalletView';
 import EntrepreneurshipView from './views/EntrepreneurshipView';
 import ProfileView from './views/ProfileView';
 import IkiminaManagementModal from './IkiminaManagementModal';
+import LanguageSwitcher from './LanguageSwitcher';
+import { useTranslations } from '../hooks';
 
 
 interface DashboardProps {
@@ -33,6 +35,7 @@ const MoonIcon = () => (
 const Dashboard: React.FC<DashboardProps> = ({ user, onApplyClick, isDarkMode, toggleDarkMode, onLogout }) => {
     const [activeView, setActiveView] = useState<DashboardView>('dashboard');
     const [managingIkimina, setManagingIkimina] = useState<Ikimina | null>(null);
+    const { t } = useTranslations();
 
     const renderActiveView = () => {
         switch (activeView) {
@@ -62,10 +65,11 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onApplyClick, isDarkMode, t
                                 <h2 className="text-xl font-bold capitalize">{activeView}</h2>
                             </div>
                             <div className="flex items-center gap-4">
+                                <LanguageSwitcher />
                                 <button onClick={toggleDarkMode} className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors">
                                     {isDarkMode ? <SunIcon /> : <MoonIcon />}
                                 </button>
-                                <span className="hidden sm:inline text-sm font-medium text-gray-700 dark:text-gray-300">Welcome, {user.name}</span>
+                                <span className="hidden sm:inline text-sm font-medium text-gray-700 dark:text-gray-300">{t('dashboard.header.welcome', { name: user.name })}</span>
                             </div>
                         </div>
                     </div>

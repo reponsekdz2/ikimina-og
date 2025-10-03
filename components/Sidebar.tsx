@@ -1,6 +1,7 @@
 import React from 'react';
 import { DashboardView, User } from '../types';
 import { DashboardIcon, IkiminaIcon, WalletIcon, EntrepreneurshipIcon, UserIcon as ProfileIcon, LogoutIcon } from '../constants';
+import { useTranslations } from '../hooks';
 
 interface SidebarProps {
     activeView: DashboardView;
@@ -32,12 +33,13 @@ const NavItem: React.FC<{
 
 
 const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, onLogout, user }) => {
+    const { t } = useTranslations();
     const navItems = [
-        { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon className="h-6 w-6" /> },
-        { id: 'ikimina', label: 'Ikimina', icon: <IkiminaIcon className="h-6 w-6" /> },
-        { id: 'wallet', label: 'Wallet', icon: <WalletIcon className="h-6 w-6" /> },
-        { id: 'entrepreneurship', label: 'Learn', icon: <EntrepreneurshipIcon className="h-6 w-6" /> },
-        { id: 'profile', label: 'Profile', icon: <ProfileIcon className="h-6 w-6" /> },
+        { id: 'dashboard', label: t('sidebar.nav.dashboard'), icon: <DashboardIcon className="h-6 w-6" /> },
+        { id: 'ikimina', label: t('sidebar.nav.ikimina'), icon: <IkiminaIcon className="h-6 w-6" /> },
+        { id: 'wallet', label: t('sidebar.nav.wallet'), icon: <WalletIcon className="h-6 w-6" /> },
+        { id: 'entrepreneurship', label: t('sidebar.nav.learn'), icon: <EntrepreneurshipIcon className="h-6 w-6" /> },
+        { id: 'profile', label: t('sidebar.nav.profile'), icon: <ProfileIcon className="h-6 w-6" /> },
     ];
 
     return (
@@ -74,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, onLogout, 
                     className="w-full flex items-center space-x-4 px-4 py-3 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-red-100 dark:hover:bg-red-900/50 hover:text-red-600 dark:hover:text-red-500 transition-colors"
                 >
                     <LogoutIcon className="h-6 w-6" />
-                    <span className="font-semibold">Logout</span>
+                    <span className="font-semibold">{t('sidebar.nav.logout')}</span>
                 </button>
             </div>
         </aside>
